@@ -20,7 +20,7 @@ export default class FilterPresenter {
   }
 
   init() {
-    this._currentFilter = this._filterModel.getFilter();
+    this._currentFilter = this._filterModel.getAll();
 
     const filters = this._getFilters();
     const prevFilterComponent = this._filterComponent;
@@ -46,11 +46,11 @@ export default class FilterPresenter {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.setAll(UpdateType.MAJOR, filterType);
   }
 
   _getFilters() {
-    const films = this._filmsModel.films;
+    const films = this._filmsModel.getAll();
 
     return {
       allMovies: filter[FilterType.ALL_MOVIES](films).length,

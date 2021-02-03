@@ -2,10 +2,10 @@ import SmartView from "./smart-view";
 import {FilterType} from "../const";
 
 
-export default class DetailsControls extends SmartView {
+export default class DetailsControlsView extends SmartView {
   constructor(film) {
     super();
-    this._data = DetailsControls.parseFilmToDetailsControls(film);
+    this._data = DetailsControlsView.parseFilmToDetailsControls(film);
     this._onDetailsControlsClick = this._onDetailsControlsClick.bind(this);
     this._onChangeActiveControls = this._onChangeActiveControls.bind(this);
 
@@ -36,10 +36,6 @@ export default class DetailsControls extends SmartView {
           isFavorite: film.isFavorite,
         }
     );
-  }
-
-  static parseDetailsControlsToFilm() {
-    return this._data;
   }
 
   restoreHandlers() {

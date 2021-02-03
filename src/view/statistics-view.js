@@ -22,10 +22,22 @@ export default class StatisticsView extends Smart {
   constructor(filmsModel) {
     super();
     this._filmsModel = filmsModel;
+    this._statisticCtxElement = null;
     this._activeFilter = StatisticPeriod.ALL_TIME;
-    this._filmsChart = null;
     this._setOnFilterChange = this._setOnFilterChange.bind(this);
     this.restoreHandlers();
+  }
+
+  get statisticCtxElement() {
+    if (!this._statisticCtxElement) {
+      this._statisticCtxElement = this.getElement().querySelector(`.statistic__chart`);
+    }
+    return this._statisticCtxElement;
+  }
+
+  removeElement() {
+    super.removeElement();
+    this._statisticCtxElement = null;
   }
 
   getTemplate() {
@@ -94,7 +106,7 @@ export default class StatisticsView extends Smart {
   }
 
   _getFilmsDataByFilter(activeFilter) {
-    const films = this._filmsModel.films;
+    const films = this._filmsModel.getAll();
     const currentDate = dayjs();
     const weekAgoDate = dayjs().subtract(7, `day`).toDate();
     const monthAgoDate = dayjs().subtract(1, `month`).toDate();
@@ -129,7 +141,7 @@ export default class StatisticsView extends Smart {
     }
 
     const watchedFilmsCount = filmsWatched.length;
-    const userRank = getUserRank(this._filmsModel.films);
+    const userRank = getUserRank(this._filmsModel.getAll());
     const totalDuration = filmsWatched.reduce((count, film) => count + film.runtime, 0);
     const allFilmsGenres = filmsWatched.reduce((allGenres, film) => {
       allGenres.push(...film.genres);
@@ -225,9 +237,8 @@ export default class StatisticsView extends Smart {
       this._statisticChart = null;
     }
     const BAR_HEIGHT = 50;
-    const statisticCtx = this.getElement().querySelector(`.statistic__chart`);
     const {genresList} = this._getFilmsDataByFilter(this._activeFilter);
-    statisticCtx.height = BAR_HEIGHT * genresList.size;
-    this._renderStatitsicsChart(statisticCtx, genresList);
+    this.statisticCtxElement.height = BAR_HEIGHT * genresList.size;
+    this._renderStatitsicsChart(this.statisticCtxElement, genresList);
   }
 }
